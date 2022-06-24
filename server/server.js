@@ -3,6 +3,9 @@ const app = express();
 const connectDB = require('./db');
 const User = require('./models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const auth = require('./middleware/authenticate');
+const authenticated = require('./middleware/authenticate');
 
 app.use(express.json());
 
@@ -54,28 +57,24 @@ app.post('/login', async (req, res, next) => {
                 msg: 'Please enter all fields'
             });
         }
-        if (!email.includes('@')) {
-            return res.status(400).json({
-                msg: 'Please enter a valid email'
-            });
-        }
         // Check if user exists
         let user = await User.findOne({ email: email });
         if (!user) {
             return res.status(400).json({
-                msg: 'user does not exist'
+                msg: 'User does not exist'
             });
         }
         // Check if password is correct
-        let isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
                 msg: 'Incorrect password'
             });
         }
-        delete user._doc.password;
+        // Create token
+        const token = jwt.sign({ id: user._id }, 'key');
         res.status(200).json({
-            msg: 'User logged in', user
+            msg: 'User logged in', token
         });
     }
     catch (err) {
@@ -83,8 +82,26 @@ app.post('/login', async (req, res, next) => {
     }
 })
 
+app.get('/private', authenticated, async (req, res, next) => {
+    return res.status(200).json({
+        msg: 'This is a private route'
+    });
 
-//
+});
+
+//public route
+app.get('/public', async (req, res, next) => {
+    try {
+        return res.status(200).json({
+            msg: 'This is a public route'
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+})
+
+// main site route
 app.get('/', (_req, res) => {
     const obj = {
         name: 'sohag',

@@ -73,6 +73,7 @@ app.post('/login', async (req, res, next) => {
                 msg: 'Incorrect password'
             });
         }
+        delete user._doc.password;
         res.status(200).json({
             msg: 'User logged in', user
         });
@@ -80,8 +81,7 @@ app.post('/login', async (req, res, next) => {
     catch (err) {
         next(err);
     }
-}
-)
+})
 
 
 //

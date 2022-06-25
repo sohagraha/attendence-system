@@ -38,8 +38,10 @@ app.get('/', (_req, res) => {
 })
 
 app.use((err, _req, res, _next) => {
-    res.status(500).json({
-        msg: err.message
+    const message = err.message ? err.message : 'Something went wrong';
+    const status = err.status ? err.status : 500;
+    res.status(status).json({
+        message
     });
 })
 // Connect to database

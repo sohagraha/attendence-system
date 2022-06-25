@@ -4,8 +4,8 @@ const connectDB = require('./db');
 const User = require('./models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const auth = require('./middleware/authenticate');
-const authenticated = require('./middleware/authenticate');
+const auth = require('./middleware/authenticateMiddleware');
+const authenticated = require('./middleware/authenticateMiddleware');
 
 app.use(express.json());
 
@@ -72,7 +72,7 @@ app.post('/login', async (req, res, next) => {
             });
         }
         // Create token
-        const token = jwt.sign({ id: user._id }, 'key');
+        const token = jwt.sign({ id: user._id }, 'key', { expiresIn: '1h' });
         res.status(200).json({
             msg: 'User logged in', token
         });

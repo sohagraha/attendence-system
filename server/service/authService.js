@@ -43,7 +43,7 @@ const loginService = async ({ email, password }) => {
         throw error('Incorrect password', 400);
     }
     const payload = {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,

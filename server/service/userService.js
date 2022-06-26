@@ -18,7 +18,12 @@ const createNewUser = (name, email, password) => {
     return user.save();
 }
 
+const getAllUsers = () => {
+    return User.find();
+}
+
 module.exports = {
     singleUser,
-    createNewUser
+    createNewUser,
+    getAllUsers
 }

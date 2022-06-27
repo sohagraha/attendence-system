@@ -9,11 +9,13 @@ const singleUser = (key, value) => {
     }
 }
 
-const createNewUser = (name, email, password) => {
+const createNewUser = (name, email, password, roles, accountStatus) => {
     const user = new User({
         name: name,
         email: email,
-        password: password
+        password: password,
+        roles: roles,
+        accountStatus: accountStatus
     });
     return user.save();
 }
@@ -22,8 +24,13 @@ const getAllUsers = () => {
     return User.find();
 }
 
+const deleteUser = (id) => {
+
+}
+
 module.exports = {
     singleUser,
     createNewUser,
-    getAllUsers
+    getAllUsers,
+    deleteUser
 }

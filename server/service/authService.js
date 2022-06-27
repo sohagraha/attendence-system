@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const error = require('../utils/error');
 const { singleUser, createNewUser } = require('./userService');
 
-const registerService = async (name, email, password) => {
+const registerService = async (name, email, password, roles, accountStatus) => {
     if (!name || !email || !password) {
         throw error('Please enter all fields', 400);
     }
@@ -21,7 +21,7 @@ const registerService = async (name, email, password) => {
 
 
     // Create new user
-    user = await createNewUser(name, email, password);
+    user = await createNewUser(name, email, password, roles, accountStatus);
 
     // Return user
     return user;
@@ -46,11 +46,11 @@ const loginService = async ({ email, password }) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        roles: user.roles,
         accountStatus: user.accountStatus
     }
     // Create token
-    const token = jwt.sign(payload, 'key', { expiresIn: '1h' });
+    const token = jwt.sign(payload, 'key', { expiresIn: '8h' });
     return token;
 }
 

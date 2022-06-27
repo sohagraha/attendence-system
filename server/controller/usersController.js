@@ -57,7 +57,7 @@ const deleteSingleUserController = async (req, res, next) => {
     catch (err) {
         next(err)
     }
-}
+};
 
 const patchSingleUserController = async (req, res) => {
     try {
@@ -81,7 +81,7 @@ const patchSingleUserController = async (req, res) => {
     catch (e) {
         next(e)
     }
-}
+};
 
 
 module.exports = {
@@ -90,4 +90,4 @@ module.exports = {
     patchSingleUserController,
     postSingleUserController,
     deleteSingleUserController
-}
+};

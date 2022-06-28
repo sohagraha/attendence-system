@@ -19,7 +19,7 @@ const getSingleUserController = async (req, res) => {
         throw error('User not found', 404);
     }
 }
-const getAllUsersController = async (req, res) => {
+const getAllUsersController = async (_req, res) => {
     try {
         const users = await getAllUsers();
         res.status(201).json({

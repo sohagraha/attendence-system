@@ -27,9 +27,24 @@ const getAttendanceById = async (req, res, next) => {
         if (!studentAttendance) {
             throw new Error('Student attendance not found');
         }
-        res.status(200).json({
-            message: 'Student attendance found', studentAttendance
-        });
+
+        const studentAttendances = await StudentAttendance.findOne({ adminAttendance: id });
+        if (!studentAttendances) {
+            const newAttendance = await new StudentAttendance({
+                user: req.user._id,
+                adminAttendance: id
+            });
+            await newAttendance.save();
+            res.status(201).json({
+                message: 'Student attendance Submitted', newAttendance
+            });
+            res.status(200).json({
+                message: 'Student attendance found', studentAttendance
+            });
+        }
+        else {
+            throw new Error('Student attendance already submitted');
+        }
     }
     catch (err) {
         next(err);
@@ -55,8 +70,24 @@ const getAttendanceStatus = async (req, res, next) => {
     }
 }
 
+const getAllAttendance = async (req, res, next) => {
+    try {
+        const studentAttendances = await StudentAttendance.find({});
+        if (!studentAttendances) {
+            throw new Error('No student attendances found', 404);
+        }
+        res.status(200).json({
+            message: 'Student attendances found', studentAttendances
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+
 module.exports = {
     getAttendance,
     getAttendanceStatus,
-    getAttendanceById
+    getAttendanceById,
+    getAllAttendance
 }

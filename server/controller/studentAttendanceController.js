@@ -28,7 +28,10 @@ const getAttendanceById = async (req, res, next) => {
             throw new Error('Student attendance not found');
         }
 
-        const studentAttendances = await StudentAttendance.findOne({ adminAttendance: id });
+        // const studentAttendances = await StudentAttendance.findOne({ adminAttendance: id });
+
+        const studentAttendances = await StudentAttendance.findOne({ adminAttendance: id, user: req.user._id });
+
         if (!studentAttendances) {
             const newAttendance = await new StudentAttendance({
                 user: req.user._id,
